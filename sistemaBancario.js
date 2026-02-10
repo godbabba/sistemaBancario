@@ -1,20 +1,17 @@
+// 1. Database & Struttura Dati
+
 const accounts = [
     {
         username: "mario",
         pin: 1234,
         balance: 1500,
-        movements: [
-            { type: "deposit", amount: 500 },
-            { type: "withdraw", amount: 200 }
-        ]
+        movements: []
     },
     {
         username: "anna",
         pin: 4321,
         balance: 3000,
-        movements: [
-            { type: "deposit", amount: 3000 }
-        ]
+        movements: []
     },
     {
         username: "luca",
@@ -24,15 +21,16 @@ const accounts = [
     }
 ];
 
+
+//2. Sistema di Autenticazione (Login)
+
 let currentAccount = null;
 let isAuthenticated = false;
 
 while (!isAuthenticated) {
 
-    // 1️⃣ chiedi username
     const inputUsername = prompt("Insert your username:").toLowerCase();
 
-    // 2️⃣ cerca l'utente
     let foundAccount = null;
 
     for (let i = 0; i < accounts.length; i++) {
@@ -42,31 +40,46 @@ while (!isAuthenticated) {
         }
     }
 
-    // 3️⃣ username NON trovato
+
     if (!foundAccount) {
         alert("Username not found. Try again.");
-        continue; // torna a chiedere lo username
+        continue; 
     }
 
-    // 4️⃣ PIN loop: chiedi finché non è corretto
+
     while (true) {
         const inputPIN = Number(prompt("Insert your PIN:"));
 
         if (foundAccount.pin === inputPIN) {
             currentAccount = foundAccount;
             isAuthenticated = true;
-            break; // esce dal loop del PIN
+            break; 
         } else {
             alert("Wrong PIN. Try again.");
         }
     }
 }
 
-console.log("Login successful");
-console.log("Welcome:",currentAccount.username,"!" ,"What do you want to do?");
 
+//3. Operazioni Bancarie Base
 
+let exitDashboard = false;
 
-// while (currentAccount) {
-//     choice = prompt("1. Saldo\n2. Prelievo\n3. Versamento\n4. Storico Movimenti\n")
-// }
+while (!exitDashboard) {
+    const choice = prompt(`Welcome ${currentAccount.username}!\n What do you want to do?\n 1. View Balance\n 2. Withdraw\n 3. Deposit\n 4. Show Movements\n 5. Logout`);
+
+    if (choice === "1") {
+        alert("Your Balance: €" + currentAccount.balance.toFixed(2));
+    } else if (choice === "2") {
+        const amount = Number(prompt("Enter amount to withdraw:"));
+        if (amount > 0 && amount <= currentAccount.balance) {
+            currentAccount.balance -= amount;
+            currentAccount.movements.push({ date: new Date().toLocaleString, type: "withdraw", amount: amount });
+            alert(`You withdrew €${amount}. New balance: €${currentAccount.balance.toFixed(2)}`);
+        } else {
+            alert("Invalid amount or insufficient funds.")
+        }
+    } else if (condition) {
+        
+    }
+}
